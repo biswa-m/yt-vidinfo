@@ -21,19 +21,31 @@
   </div>
 
   <div class="form__group">
-    <label for="name" class="form__label">Result</label><br />
+    <div for="name" class="form__label">
+      Result
+      <div style="text-align: right; padding: 5px; float: right;">
+        <button
+          onclick="selectElementContents( document.getElementById('tbody') );"
+        >
+          Copy Content
+        </button>
+      </div>
+    </div>
+    <br/>
+
     <div class="centerify" id="loader1" style="display: none;">
       <div class="loader"></div>
     </div>
     <div id="yt_results">
       <table style="width: -webkit-fill-available;">
-        <tbody id="tbody">
+        <tbody id="tbody1">
           <tr>
             <th>calculated</th>
             <th>id</th>
             <th>original</th>
           </tr>
         </tbody>
+        <tbody id="tbody"></tbody>
       </table>
     </div>
   </div>
