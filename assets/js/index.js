@@ -72,6 +72,8 @@ async function handleSubmit() {
     loading = false;
     resetLoading();
   }
+
+  results = [];
 }
 
 function setLoading() {
