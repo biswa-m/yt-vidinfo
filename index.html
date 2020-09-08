@@ -1,0 +1,28 @@
+<!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" /> -->
+
+<link href="./assets/css/style.css" rel="stylesheet" />
+<script src="./env.js"></script>
+<script src="./assets/js/index.js"></script>
+
+<div class="row">
+  <div class="form__group">
+    <label for="inputIds" class="form__label">Youtube Ids</label><br />
+    <textarea
+      type="text"
+      class="form__input linkinput"
+      id="inputIds"
+      placeholder="Youtube Ids"
+      required=""
+    ></textarea>
+
+    <div onclick="handleSubmit()" class="submitbtn">
+      Submit
+    </div>
+  </div>
+
+  <div class="form__group">
+    <label for="name" class="form__label">Result</label><br />
+    <div class="centerify" id="loader1" style="display: none;"><div class="loader"></div></div>
+    <div id="yt_results"></div>
+  </div>
+</div>
