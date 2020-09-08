@@ -1,7 +1,7 @@
 const LINKS_PER_BATCH = 2;
 var loading = false;
 
-function handleSubmit() {
+async function handleSubmit() {
   if (loading) return;
 
   var idsEl = document.getElementById("inputIds");
@@ -33,7 +33,6 @@ function handleSubmit() {
   loading = true;
   setLoading();
 
-  let batchLoaded = 0;
   let results = [];
 
   try {
@@ -44,29 +43,22 @@ function handleSubmit() {
       const url =
         `https://www.googleapis.com/youtube/v3/videos` +
         `?part=contentDetails&key=${YT_API_KEY}&id=${batch.join()}`;
-      Http.open("GET", url);
-      Http.send();
 
-      Http.onreadystatechange = (e) => {
-        let res = Http.responseText;
-        let batchItems = JSON.parse(res.toString()).items;
-        results.push(batchItems);
+      let res = await axios.get(url);
 
-        batchLoaded++;
+      let batchItems = res.data.items;
+      results.push(batchItems);
 
-        console.log(`Batch loaded ${batchLoaded}/${batches.length}`);
-        console.log({ res, batchItems, results });
-
-        if (batchLoaded >= batches.length) {
-          loading = false;
-          resetLoading();
-
-          let resEl = document.getElementById("yt_results");
-
-          resEl.textContent = JSON.stringify(results);
-        }
-      };
+      console.log(`Batch loaded ${i}/${batches.length}`);
+      console.log({ res, batchItems, results });
     }
+
+    loading = false;
+    resetLoading();
+
+    let resEl = document.getElementById("yt_results");
+
+    resEl.textContent = JSON.stringify(results);
   } catch (e) {
     console.warn(e);
     loading = false;
@@ -86,4 +78,18 @@ function resetLoading() {
   var y = document.getElementById("yt_results");
   x.style.display = "none";
   y.style.display = "block";
+}
+
+function performGetRequest1() {
+  var resultElement = document.getElementById("getResult1");
+  resultElement.innerHTML = "";
+
+  axios
+    .get("http://jsonplaceholder.typicode.com/todos")
+    .then(function (response) {
+      resultElement.innerHTML = generateSuccessHTMLOutput(response);
+    })
+    .catch(function (error) {
+      resultElement.innerHTML = generateErrorHTMLOutput(error);
+    });
 }
