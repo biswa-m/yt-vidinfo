@@ -50,7 +50,7 @@ body {
 }
 
 .linkinput {
-  height: 80vh;
+  height: 60vh;
 }
 
 .row {
@@ -81,6 +81,16 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+th {
+  padding: 5px;
+  border: 0.5px solid #2c5364
+}
+
+td {
+  padding: 5px;
+  border: 0.5px solid #2c5364
 }
 
 @keyframes spin {

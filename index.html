@@ -1,10 +1,10 @@
-<!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" /> -->
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <link href="./assets/css/style.css" rel="stylesheet" />
 <script src="./env.js"></script>
 <script src="./assets/js/index.js"></script>
 
-<div class="row">
+<div class="row" style="padding: 10 5%;">
   <div class="form__group">
     <label for="inputIds" class="form__label">Youtube Ids</label><br />
     <textarea
@@ -22,7 +22,19 @@
 
   <div class="form__group">
     <label for="name" class="form__label">Result</label><br />
-    <div class="centerify" id="loader1" style="display: none;"><div class="loader"></div></div>
-    <div id="yt_results"></div>
+    <div class="centerify" id="loader1" style="display: none;">
+      <div class="loader"></div>
+    </div>
+    <div id="yt_results">
+      <table style="width: -webkit-fill-available;">
+        <tbody id="tbody">
+          <tr>
+            <th>calculated</th>
+            <th>id</th>
+            <th>original</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

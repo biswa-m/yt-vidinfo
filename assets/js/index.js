@@ -1,4 +1,4 @@
-const LINKS_PER_BATCH = 2;
+const LINKS_PER_BATCH = 50;
 var loading = false;
 
 async function handleSubmit() {
@@ -47,7 +47,7 @@ async function handleSubmit() {
       let res = await axios.get(url);
 
       let batchItems = res.data.items;
-      results.push(batchItems);
+      results.push(...batchItems);
 
       console.log(`Batch loaded ${i}/${batches.length}`);
       console.log({ res, batchItems, results });
@@ -56,9 +56,17 @@ async function handleSubmit() {
     loading = false;
     resetLoading();
 
-    let resEl = document.getElementById("yt_results");
+    // let resEl = document.getElementById("yt_results");
 
-    resEl.textContent = JSON.stringify(results);
+    // resEl.textContent = JSON.stringify(results);
+
+    let tableData = results.map((row) => [
+      processedDuration(row.contentDetails.duration),
+      row.id,
+      row.contentDetails.duration,
+    ]);
+
+    tableCreate(tableData);
   } catch (e) {
     console.warn(e);
     loading = false;
@@ -80,16 +88,40 @@ function resetLoading() {
   y.style.display = "block";
 }
 
-function performGetRequest1() {
-  var resultElement = document.getElementById("getResult1");
-  resultElement.innerHTML = "";
+function tableCreate(data) {
+  // data = [
+  //   [1, 2, 3],
+  //   [1, 2, 3],
+  //   [5, 6, 7],
+  // ];
 
-  axios
-    .get("http://jsonplaceholder.typicode.com/todos")
-    .then(function (response) {
-      resultElement.innerHTML = generateSuccessHTMLOutput(response);
-    })
-    .catch(function (error) {
-      resultElement.innerHTML = generateErrorHTMLOutput(error);
-    });
+  var tbdy = document.getElementById("tbody");
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+
+    var tr = document.createElement("tr");
+    for (var j = 0; j < row.length; j++) {
+      var td = document.createElement("td");
+      td.appendChild(document.createTextNode(row[j]));
+      tr.appendChild(td);
+    }
+    tbdy.appendChild(tr);
+  }
+}
+
+function processedDuration(d) {
+  //PT4M53S
+  let d1 = d.match("H")
+    ? d.replace("PT", "")
+    : d.match("M")
+    ? d.replace("PT", "00:")
+    : d.replace("PT", "00:00:");
+
+  let d2 = d1.replace("H", ":").replace("M", ":").replace("S", "");
+  let d3 = d2
+    .split(":")
+    .map((x) => (x.length == 0 ? "00" : x.length == 1 ? "0" + x : x))
+    .join(":");
+
+  return d3;
 }
