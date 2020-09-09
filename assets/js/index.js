@@ -98,6 +98,8 @@ function tableCreate(data) {
   // ];
 
   var tbdy = document.getElementById("tbody");
+  removeAllChildNodes(tbdy);
+
   for (var i = 0; i < data.length; i++) {
     var row = data[i];
 
@@ -149,4 +151,10 @@ function selectElementContents(el) {
   }
   document.execCommand("copy");
   
+}
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
 }
