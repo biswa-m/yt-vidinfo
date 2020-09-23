@@ -15,7 +15,7 @@ async function handleSubmit() {
     .map((x) => {
       if (!x) return null;
       x = x.trim();
-      x = x.replace("https://www.youtu.be/", "");
+      x = x.replace("https://youtu.be/", "");
       x = x.replace(/\//g, "");
       return x;
     })
