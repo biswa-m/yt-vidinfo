@@ -12,7 +12,13 @@ async function handleSubmit() {
   ids = str
     .replace(/\n/g, ",")
     .split(",")
-    .map((x) => x && x.trim())
+    .map((x) => {
+      if (!x) return null;
+      x = x.trim();
+      x = x.replace("https://www.youtu.be/", "");
+      x = x.replace(/\//g, "");
+      return x;
+    })
     .filter((x) => !!x);
 
   let batches = [];
@@ -42,7 +48,7 @@ async function handleSubmit() {
       const Http = new XMLHttpRequest();
       const url =
         `https://www.googleapis.com/youtube/v3/videos` +
-        `?part=contentDetails&key=${YT_API_KEY}&id=${batch.join()}`;
+        `?part=contentDetails,snippet&key=${YT_API_KEY}&id=${batch.join()}`;
 
       let res = await axios.get(url);
 
@@ -64,6 +70,9 @@ async function handleSubmit() {
       processedDuration(row.contentDetails.duration),
       row.id,
       row.contentDetails.duration,
+      row.snippet.title,
+      row.snippet.description,
+      (row.snippet.tags && row.snippet.tags.join(', ')) ||'',
     ]);
 
     tableCreate(tableData);
@@ -131,30 +140,31 @@ function processedDuration(d) {
 }
 
 function selectElementContents(el) {
-  var body = document.body, range, sel;
+  var body = document.body,
+    range,
+    sel;
   if (document.createRange && window.getSelection) {
-      range = document.createRange();
-      sel = window.getSelection();
-      sel.removeAllRanges();
-      try {
-          range.selectNodeContents(el);
-          sel.addRange(range);
-      } catch (e) {
-          range.selectNode(el);
-          sel.addRange(range);
-      }
+    range = document.createRange();
+    sel = window.getSelection();
+    sel.removeAllRanges();
+    try {
+      range.selectNodeContents(el);
+      sel.addRange(range);
+    } catch (e) {
+      range.selectNode(el);
+      sel.addRange(range);
+    }
   } else if (body.createTextRange) {
-      range = body.createTextRange();
-      range.moveToElementText(el);
-      range.select();
-      document.execCommand("copy");
+    range = body.createTextRange();
+    range.moveToElementText(el);
+    range.select();
+    document.execCommand("copy");
   }
   document.execCommand("copy");
-  
 }
 
 function removeAllChildNodes(parent) {
   while (parent.firstChild) {
-      parent.removeChild(parent.firstChild);
+    parent.removeChild(parent.firstChild);
   }
 }

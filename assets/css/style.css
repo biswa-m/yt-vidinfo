@@ -50,11 +50,11 @@ body {
 }
 
 .linkinput {
-  height: 60vh;
+  height: 30vh;
 }
 
 .row {
-  display: flex;
+  /* display: flex; */
 }
 
 .submitbtn {
