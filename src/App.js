@@ -1,5 +1,69 @@
+import React from "react";
+import axios from 'axios'
+import "./App.css";
+
 const LINKS_PER_BATCH = 50;
+const YT_API_KEY = process.env.REACT_APP_YT_API_KEY;
 var loading = false;
+
+function App() {
+  return (
+    <div className="row" style={{ padding: "10 5%" }}>
+      <div className="form__group">
+        <label htmlFor="inputIds" className="form__label">
+          Youtube Ids
+        </label>
+        <br />
+        <textarea
+          type="text"
+          className="form__input linkinput"
+          id="inputIds"
+          placeholder="Youtube Ids"
+          required=""
+        ></textarea>
+
+        <div onClick={handleSubmit} className="submitbtn">
+          Submit
+        </div>
+      </div>
+
+      <div className="form__group">
+        <div htmlFor="name" className="form__label">
+          Result
+          <div style={{ textAlign: "right", padding: "5px", float: "right" }}>
+            <button
+              onClick={() =>
+                selectElementContents(document.getElementById("tbody"))
+              }
+            >
+              Copy Content
+            </button>
+          </div>
+        </div>
+        <br />
+
+        <div className="centerify" id="loader1" style={{ display: "none" }}>
+          <div className="loader"></div>
+        </div>
+        <div id="yt_results">
+          <table style={{ width: "-webkit-fill-available" }}>
+            <tbody id="tbody1">
+              <tr>
+                <th>calculated</th>
+                <th>id</th>
+                <th>original</th>
+                <th>title</th>
+                <th>description</th>
+                <th>tags</th>
+              </tr>
+            </tbody>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 async function handleSubmit() {
   if (loading) return;
@@ -9,7 +73,7 @@ async function handleSubmit() {
 
   if (!str) return;
 
-  ids = str
+  let ids = str
     .replace(/\n/g, ",")
     .split(",")
     .map((x) => {
@@ -29,7 +93,7 @@ async function handleSubmit() {
     const link = ids[i];
     tmp.push(link);
 
-    if (tmp.length >= LINKS_PER_BATCH || i == ids.length - 1) {
+    if (tmp.length >= LINKS_PER_BATCH || i===ids.length - 1) {
       batches.push(tmp);
       tmp = [];
     }
@@ -45,7 +109,6 @@ async function handleSubmit() {
     for (let i = 0; i < batches.length; i++) {
       const batch = batches[i];
 
-      const Http = new XMLHttpRequest();
       const url =
         `https://www.googleapis.com/youtube/v3/videos` +
         `?part=contentDetails,snippet&key=${YT_API_KEY}&id=${batch.join()}`;
@@ -72,7 +135,7 @@ async function handleSubmit() {
       row.contentDetails.duration,
       row.snippet.title,
       row.snippet.description,
-      (row.snippet.tags && row.snippet.tags.join(', ')) ||'',
+      (row.snippet.tags && row.snippet.tags.join(", ")) || "",
     ]);
 
     tableCreate(tableData);
@@ -133,7 +196,7 @@ function processedDuration(d) {
   let d2 = d1.replace("H", ":").replace("M", ":").replace("S", "");
   let d3 = d2
     .split(":")
-    .map((x) => (x.length == 0 ? "00" : x.length == 1 ? "0" + x : x))
+    .map((x) => (x.length===0 ? "00" : x.length===1 ? "0" + x : x))
     .join(":");
 
   return d3;
@@ -168,3 +231,5 @@ function removeAllChildNodes(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
+
+export default App;
