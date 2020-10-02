@@ -8,11 +8,17 @@ var loading = false;
 
 function App() {
   return (
+    <>
+    <div className="header">
+    <img alt="logo" src={require('./assets/img/logo.png')} className="logo"/>
+    </div>
+
     <div className="row" style={{ padding: "10 5%" }}>
+
       <div className="form__group">
-        <label htmlFor="inputIds" className="form__label">
+        {/* <label htmlFor="inputIds" className="form__label">
           Youtube Ids
-        </label>
+        </label> */}
         <br />
         <textarea
           type="text"
@@ -62,6 +68,7 @@ function App() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

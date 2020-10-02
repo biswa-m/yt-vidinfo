@@ -10,7 +10,7 @@
 body {
   width: 100%;
   background: #0f2027; /* fallback for old browsers */
-  background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+  background: linear-gradient(to left, #2c5364, #203a43, #0f2027);
   color: #fff;
 }
 
@@ -101,4 +101,20 @@ td {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.logo {
+  max-width: 50%;
+  width: 200px;
+}
+.header {
+  /* background: linear-gradient(90deg, rgb(255 255 255) 0%, rgb(0 0 0 / 0) 100%); */
+  /* width: 400px; */
+  /* max-width: 100%; */
+  padding: 1%;
+}
+
+#yt_results {
+  max-width: 100%;
+  overflow-x: auto;
 }
