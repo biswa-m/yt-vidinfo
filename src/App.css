@@ -86,12 +86,12 @@ body {
 
 th {
   padding: 5px;
-  border: 0.5px solid #2c5364
+  border: 0.5px solid #2c5364;
 }
 
 td {
   padding: 5px;
-  border: 0.5px solid #2c5364
+  border: 0.5px solid #2c5364;
 }
 
 @keyframes spin {
@@ -117,4 +117,8 @@ td {
 #yt_results {
   max-width: 100%;
   overflow-x: auto;
+}
+
+#yt_results .noContent {
+  background-color: #ff3a4dd1;
 }

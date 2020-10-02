@@ -1,75 +1,117 @@
 import React from "react";
-import axios from 'axios'
+import axios from "axios";
 import "./App.css";
+import { Component } from "react";
 
 const LINKS_PER_BATCH = 50;
 const YT_API_KEY = process.env.REACT_APP_YT_API_KEY;
 var loading = false;
 
-function App() {
-  return (
-    <>
-    <div className="header">
-    <img alt="logo" src={require('./assets/img/logo.png')} className="logo"/>
-    </div>
+class App extends Component {
+  state = {
+    results: [],
+  };
 
-    <div className="row" style={{ padding: "10 5%" }}>
+  async handleSubmit(e) {
+    e.preventDefault();
+    let data = await handleSubmit();
+    console.log({ data });
 
-      <div className="form__group">
-        {/* <label htmlFor="inputIds" className="form__label">
+    if (data.tableData && data.ids) {
+      let results = data.ids?.map((id) => {
+        let matched = data.tableData?.find((x) => x?.id === id) || {};
+        return { ...matched, id };
+      });
+
+      this.setState({ results });
+    }
+  }
+
+  render() {
+    return (
+      <>
+        <div className="header">
+          <img
+            alt="logo"
+            src={require("./assets/img/logo.png")}
+            className="logo"
+          />
+        </div>
+
+        <div className="row" style={{ padding: "10 5%" }}>
+          <div className="form__group">
+            {/* <label htmlFor="inputIds" className="form__label">
           Youtube Ids
         </label> */}
-        <br />
-        <textarea
-          type="text"
-          className="form__input linkinput"
-          id="inputIds"
-          placeholder="Youtube Ids"
-          required=""
-        ></textarea>
+            <br />
+            <textarea
+              type="text"
+              className="form__input linkinput"
+              id="inputIds"
+              placeholder="Youtube Ids"
+              required=""
+            ></textarea>
 
-        <div onClick={handleSubmit} className="submitbtn">
-          Submit
-        </div>
-      </div>
+            <div onClick={this.handleSubmit.bind(this)} className="submitbtn">
+              Submit
+            </div>
+          </div>
 
-      <div className="form__group">
-        <div htmlFor="name" className="form__label">
-          Result
-          <div style={{ textAlign: "right", padding: "5px", float: "right" }}>
-            <button
-              onClick={() =>
-                selectElementContents(document.getElementById("tbody"))
-              }
-            >
-              Copy Content
-            </button>
+          <div className="form__group">
+            <div htmlFor="name" className="form__label">
+              Result
+              <div
+                style={{ textAlign: "right", padding: "5px", float: "right" }}
+              >
+                <button
+                  onClick={() =>
+                    selectElementContents(document.getElementById("tbody"))
+                  }
+                >
+                  Copy Content
+                </button>
+              </div>
+            </div>
+            <br />
+
+            <div className="centerify" id="loader1" style={{ display: "none" }}>
+              <div className="loader"></div>
+            </div>
+            <div id="yt_results">
+              <table style={{ width: "-webkit-fill-available" }}>
+                <tbody id="tbody1">
+                  <tr>
+                    <th>calculated</th>
+                    <th>id</th>
+                    <th>original</th>
+                    <th>title</th>
+                    <th>description</th>
+                    <th>tags</th>
+                  </tr>
+                </tbody>
+                <tbody id="tbody">
+                  {this.state.results?.map((item) => (
+                    <tr
+                      className={
+                        !item?.title || !item.duration ? "noContent" : ""
+                      }
+                    >
+                      <td>{item.duration}</td>
+                      <td>{item.id}</td>
+                      <td>{item.durationOriginal}</td>
+                      <td>{item.title}</td>
+                      <td>{item.description}</td>
+                      <td>{item.tags}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <br />
-
-        <div className="centerify" id="loader1" style={{ display: "none" }}>
-          <div className="loader"></div>
-        </div>
-        <div id="yt_results">
-          <table style={{ width: "-webkit-fill-available" }}>
-            <tbody id="tbody1">
-              <tr>
-                <th>calculated</th>
-                <th>id</th>
-                <th>original</th>
-                <th>title</th>
-                <th>description</th>
-                <th>tags</th>
-              </tr>
-            </tbody>
-            <tbody id="tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 async function handleSubmit() {
@@ -100,7 +142,7 @@ async function handleSubmit() {
     const link = ids[i];
     tmp.push(link);
 
-    if (tmp.length >= LINKS_PER_BATCH || i===ids.length - 1) {
+    if (tmp.length >= LINKS_PER_BATCH || i === ids.length - 1) {
       batches.push(tmp);
       tmp = [];
     }
@@ -136,16 +178,17 @@ async function handleSubmit() {
 
     // resEl.textContent = JSON.stringify(results);
 
-    let tableData = results.map((row) => [
-      processedDuration(row.contentDetails.duration),
-      row.id,
-      row.contentDetails.duration,
-      row.snippet.title,
-      row.snippet.description,
-      (row.snippet.tags && row.snippet.tags.join(", ")) || "",
-    ]);
+    let tableData = results.map((row) => ({
+      duration: processedDuration(row.contentDetails.duration),
+      id: row.id,
+      durationOriginal: row.contentDetails.duration,
+      title: row.snippet.title,
+      description: row.snippet.description,
+      tags: (row.snippet.tags && row.snippet.tags.join(", ")) || "",
+    }));
 
-    tableCreate(tableData);
+    // tableCreate(tableData);
+    return { tableData, ids };
   } catch (e) {
     console.warn(e);
     loading = false;
@@ -203,7 +246,7 @@ function processedDuration(d) {
   let d2 = d1.replace("H", ":").replace("M", ":").replace("S", "");
   let d3 = d2
     .split(":")
-    .map((x) => (x.length===0 ? "00" : x.length===1 ? "0" + x : x))
+    .map((x) => (x.length === 0 ? "00" : x.length === 1 ? "0" + x : x))
     .join(":");
 
   return d3;
