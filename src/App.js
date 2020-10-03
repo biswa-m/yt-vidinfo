@@ -38,13 +38,22 @@ class App extends Component {
             src={require("./assets/img/logo.png")}
             className="logo"
           />
+
+          <div className="right">
+            <a target="_blank" href="//github.com/biswa-m">
+              <img alt="git" src={require("./assets/img/github.png")} />
+            </a>
+            <a target="_blank" href="mailto:bis.mhnta@gmail.com">
+              <img alt="git" src={require("./assets/img/email.png")} />
+            </a>
+          </div>
         </div>
 
         <div className="row" style={{ padding: "10 5%" }}>
-          <div className="form__group">
-            {/* <label htmlFor="inputIds" className="form__label">
-          Youtube Ids
-        </label> */}
+          <div className="form__group cust1">
+            <label htmlFor="inputIds" className="form__label">
+              Youtube Ids
+            </label>
             <br />
             <textarea
               type="text"
@@ -58,6 +67,7 @@ class App extends Component {
               Submit
             </div>
           </div>
+
 
           <div className="form__group">
             <div htmlFor="name" className="form__label">
@@ -92,18 +102,23 @@ class App extends Component {
                       <input
                         type="checkbox"
                         checked={!this.state.hideDesc}
-                        onChange={()=>this.setState({
-                          hideDesc: !this.state.hideDesc,
-                        })}
+                        onChange={() =>
+                          this.setState({
+                            hideDesc: !this.state.hideDesc,
+                          })
+                        }
                       />
                     </th>
-                    <th>tags{" "}
-                    <input
+                    <th>
+                      tags{" "}
+                      <input
                         type="checkbox"
                         checked={!this.state.hideTags}
-                        onChange={()=>this.setState({
-                          hideTags: !this.state.hideTags,
-                        })}
+                        onChange={() =>
+                          this.setState({
+                            hideTags: !this.state.hideTags,
+                          })
+                        }
                       />
                     </th>
                   </tr>
@@ -119,8 +134,8 @@ class App extends Component {
                       <td>{item.id}</td>
                       <td>{item.durationOriginal}</td>
                       <td>{item.title}</td>
-                      <td>{this.state.hideDesc ? '': item.description}</td>
-                      <td>{this.state.hideTags ? '':item.tags}</td>
+                      <td>{this.state.hideDesc ? "" : item.description}</td>
+                      <td>{this.state.hideTags ? "" : item.tags}</td>
                     </tr>
                   ))}
                 </tbody>
