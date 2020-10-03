@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import axios from "axios";
+import ScriptTag from "react-script-tag";
+
 import "./App.css";
-import { Component } from "react";
 
 const LINKS_PER_BATCH = 50;
 const YT_API_KEY = process.env.REACT_APP_YT_API_KEY;
@@ -30,8 +31,18 @@ class App extends Component {
   }
 
   render() {
+    if (window.location.hostname === 'techlabdelta.com') {
+      window.location = '//yt.techlabdelta.com';
+      return <div>Redirecting...</div>
+    };
+
     return (
       <>
+        <ScriptTag
+          type="text/javascript"
+          src="//servedby.eleavers.com/ads/ads.php?t=MjI3OTg7MTM3NTA7aG9yaXpvbnRhbC5sZWFkZXJib2FyZA==&index=1"
+        />
+
         <div className="header">
           <img
             alt="logo"
@@ -67,7 +78,6 @@ class App extends Component {
               Submit
             </div>
           </div>
-
 
           <div className="form__group">
             <div htmlFor="name" className="form__label">
