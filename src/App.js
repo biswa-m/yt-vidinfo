@@ -10,6 +10,8 @@ var loading = false;
 class App extends Component {
   state = {
     results: [],
+    hideDesc: false,
+    hideTags: false,
   };
 
   async handleSubmit(e) {
@@ -85,8 +87,25 @@ class App extends Component {
                     <th>id</th>
                     <th>original</th>
                     <th>title</th>
-                    <th>description</th>
-                    <th>tags</th>
+                    <th>
+                      description{" "}
+                      <input
+                        type="checkbox"
+                        checked={!this.state.hideDesc}
+                        onChange={()=>this.setState({
+                          hideDesc: !this.state.hideDesc,
+                        })}
+                      />
+                    </th>
+                    <th>tags{" "}
+                    <input
+                        type="checkbox"
+                        checked={!this.state.hideTags}
+                        onChange={()=>this.setState({
+                          hideTags: !this.state.hideTags,
+                        })}
+                      />
+                    </th>
                   </tr>
                 </tbody>
                 <tbody id="tbody">
@@ -100,8 +119,8 @@ class App extends Component {
                       <td>{item.id}</td>
                       <td>{item.durationOriginal}</td>
                       <td>{item.title}</td>
-                      <td>{item.description}</td>
-                      <td>{item.tags}</td>
+                      <td>{this.state.hideDesc ? '': item.description}</td>
+                      <td>{this.state.hideTags ? '':item.tags}</td>
                     </tr>
                   ))}
                 </tbody>
